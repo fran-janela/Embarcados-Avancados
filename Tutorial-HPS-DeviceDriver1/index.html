@@ -1,0 +1,1688 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://insper.github.io/Embarcados-Avancados/Tutorial-HPS-DeviceDriver1/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.2">
+    
+    
+      
+        <title>Device Driver - Eletiva: SoC e Linux Embarcado</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.69437709.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans+Extra+Condensed:700|Oxygen+Mono|Source+Sans+Pro:700|Source+Serif+Pro&amp;display=swap">
+<link rel="stylesheet" href="../assets/css/devlife.css">
+
+
+    <script>
+        window.ihandout_config = JSON.parse(`{"report": {"url": "https://devlife.insper-comp.com.br/api/offerings/1/exercises/"}}`);
+    </script>
+
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#device-driver" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Eletiva: SoC e Linux Embarcado" class="md-header__button md-logo" aria-label="Eletiva: SoC e Linux Embarcado" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Eletiva: SoC e Linux Embarcado
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Device Driver
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_1">
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/insper/Embarcados-Avancados" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Insper/Embarcados-Avancados
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href=".." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Tutorial-HPS/" class="md-tabs__link md-tabs__link--active">
+        HPS
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Tutorial-HPS-FPGA-BlinkLED/" class="md-tabs__link">
+        HPS + FPGA
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Tutorial-Acelerando-HLS/" class="md-tabs__link">
+        Acelerando
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Tutorial-FPGA-RTL/" class="md-tabs__link">
+        FPGA
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Projeto-Overview/" class="md-tabs__link">
+        Tutoriais Alunos
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../info-FPGA-e-Softwares/" class="md-tabs__link">
+        Úteis
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Eletiva: SoC e Linux Embarcado" class="md-nav__button md-logo" aria-label="Eletiva: SoC e Linux Embarcado" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Eletiva: SoC e Linux Embarcado
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/insper/Embarcados-Avancados" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Insper/Embarcados-Avancados
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          HPS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="HPS" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          HPS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-HPS/" class="md-nav__link">
+        Visão geral
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-HPS-Running/" class="md-nav__link">
+        Linux embarcado
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-HPS-BuildSystem/" class="md-nav__link">
+        Configurando infra
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-HPS-BlinkLED/" class="md-nav__link">
+        ARM BlinkLED
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../info-HPS-ethernet/" class="md-nav__link">
+        Extra: configurando rede
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Entrega-4/" class="md-nav__link">
+        👁 Entrega 1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-HPS-Kernel/" class="md-nav__link">
+        Compilando o kernel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-HPS-Buildroot/" class="md-nav__link">
+        Buildroot
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Entrega-5/" class="md-nav__link">
+        👁 Entrega 2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Device Driver
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Device Driver
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#kernel" class="md-nav__link">
+    Kernel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#userspace-vs-kernel-space" class="md-nav__link">
+    Userspace vs Kernel Space
+  </a>
+  
+    <nav class="md-nav" aria-label="Userspace vs Kernel Space">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#userspace" class="md-nav__link">
+    userspace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kernel-space" class="md-nav__link">
+    Kernel Space
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#kernel-module-device-driver" class="md-nav__link">
+    Kernel Module / Device driver
+  </a>
+  
+    <nav class="md-nav" aria-label="Kernel Module / Device driver">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#device-driver_1" class="md-nav__link">
+    Device driver
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#device-tree-dts" class="md-nav__link">
+    Device Tree (dts)
+  </a>
+  
+    <nav class="md-nav" aria-label="Device Tree (dts)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#u-boot" class="md-nav__link">
+    u-boot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dtb-dts-compilado" class="md-nav__link">
+    dtb (dts compilado)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entendendo-o-dts" class="md-nav__link">
+    entendendo o dts
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-HPS-kernel-module/" class="md-nav__link">
+        Kernel module
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-HPS-kernel-chardriver/" class="md-nav__link">
+        Char device driver
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          HPS + FPGA
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="HPS + FPGA" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          HPS + FPGA
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-HPS-FPGA-BlinkLED/" class="md-nav__link">
+        Blink FPGA LED
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-HPS-FPGA-kernel-char-led-driver/" class="md-nav__link">
+        Char LED device driver
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-HPS-FPGA-VGA/" class="md-nav__link">
+        VGA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Entrega-6/" class="md-nav__link">
+        👁 Entrega 6
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Acelerando
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Acelerando" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Acelerando
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-Acelerando-HLS/" class="md-nav__link">
+        Acelerando - HLS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Entrega-Extra-1/" class="md-nav__link">
+        👁 Entrega 7
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          FPGA
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="FPGA" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          FPGA
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-FPGA-RTL/" class="md-nav__link">
+        RTL / VHDL
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Entrega-1/" class="md-nav__link">
+        👁 Entrega 1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-FPGA-NIOS/" class="md-nav__link">
+        NIOS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Entrega-2/" class="md-nav__link">
+        👁 Entrega 2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Entrega-3/" class="md-nav__link">
+        👁 Entrega 3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Tutorial-FPGA-NIOS-IP/" class="md-nav__link">
+        IP Core
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Tutoriais Alunos
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tutoriais Alunos" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Tutoriais Alunos
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Projeto-Overview/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Projeto-Rubrica/" class="md-nav__link">
+        Rubrica
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/Insper/Embarcados-Avancados-Template" class="md-nav__link">
+        Template markdown
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2020/PS3-Linux-Tutorial/" class="md-nav__link">
+        PS3 Hack
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2020/Android/" class="md-nav__link">
+        Android para Raspbery Pi 3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2020/LED-HW/" class="md-nav__link">
+        Periférico para controlar matriz de led da família WS281x
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2020/LED-Linux/" class="md-nav__link">
+        Driver linux para acender leds
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2020/python/" class="md-nav__link">
+        Soc & Python
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2020/metropolis/" class="md-nav__link">
+        SDAccel / Vitis - Algoritmo metropolis
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2020/Audio/" class="md-nav__link">
+        Áudio na DE10
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2020/cripto/" class="md-nav__link">
+        Criptografia em Hardware Fpga
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2019/Gabriel-TensorFlow/" class="md-nav__link">
+        TensorFlow
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2019/Leo-OpenCL/" class="md-nav__link">
+        OpenCL
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2019/Elisa-Yocto/" class="md-nav__link">
+        Yocto
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2019/Pedro-OpenCV/" class="md-nav__link">
+        Jetson Nano GPU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2019/Martim-F1/" class="md-nav__link">
+        FPGA na AWS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2019/Toranja-DevDriver/" class="md-nav__link">
+        Linux Device Driver
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Úteis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Úteis" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Úteis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../info-FPGA-e-Softwares/" class="md-nav__link">
+        Infraestrutura de HW e SWs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../info-VHDL/" class="md-nav__link">
+        VHDL
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../info-SDcard/" class="md-nav__link">
+        Atualizando o SDCARD
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../info-HPS-Serial/" class="md-nav__link">
+        Screen
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../info-HPS-ethernet/" class="md-nav__link">
+        Ethernet
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/Insper/Embarcados-Avancados/edit/master/docs-src/Tutorial-HPS-DeviceDriver1.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="device-driver">Device Driver<a class="headerlink" href="#device-driver" title="Permanent link">¶</a></h1>
+<p>Iremos nesse tutorial desenvolver um device driver para o kernel do linux, esse device irá abstrair o controle do LED e o acesso a chave SW do kit de desenvolvimento.</p>
+<h2 id="kernel">Kernel<a class="headerlink" href="#kernel" title="Permanent link">¶</a></h2>
+<p>O Linux é um <a href="https://en.wikipedia.org/wiki/Monolithic_kernel">kernel monolitico</a>, onde todo código referente ao sistema operacional acontece no kernel space. </p>
+<p><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Linux_kernel_ubiquity.svg/1920px-Linux_kernel_ubiquity.svg.png" width="500"/></p>
+<p>O kernel do Linux é responsável, dentre outras coisas, por:</p>
+<ul>
+<li>gerenciar processos e taréfas</li>
+<li>scheduling</li>
+<li>virtualização, controle de grupos/ usuários</li>
+<li>gerenciamento de memória/ paginação</li>
+<li>comunicação inter-processos</li>
+<li>entrada/saída</li>
+<li>gerenciamento de arquivos</li>
+<li>device drivers</li>
+<li>abstração de hardware</li>
+</ul>
+<p><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Linux_kernel_map.png" width="500"/></p>
+<blockquote>
+<p>Mapa da arquitetura interna do kernel do linux</p>
+</blockquote>
+<div class="admonition info">
+<p class="admonition-title">Microkernel</p>
+<p>O microkernel é uma alternativa ao kernel monolitico, nessa arquitetura o kernel implementa o mínimo necessário.
+<img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/OS-structure.svg/900px-OS-structure.svg.png" width="300"/></p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">GNU</p>
+<p>O kernel do linux faz uso de diversos softwares criados e disponíveis pela comunidade <a href="https://www.gnu.org">GNU</a> (como o gcc, gdb, make, e <a href="https://www.gnu.org/software/software.html">muitos outros</a> por isso é muitas vezes conhecido como GNU/Linux.</p>
+<p><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Gnulinux.svg/260px-Gnulinux.svg.png" width="100"/></p>
+</div>
+<h2 id="userspace-vs-kernel-space">Userspace vs Kernel Space<a class="headerlink" href="#userspace-vs-kernel-space" title="Permanent link">¶</a></h2>
+<blockquote>
+<p>Grande parte dessa secção foi traduzida de <a href="https://www.ctrlinux.com/blog/?p=40">https://www.ctrlinux.com/blog/?p=40</a></p>
+</blockquote>
+<p>Userspace é uma região de memória virtual onde todos os programas do usuário são executados. Os programas que fazem parte do userspace são executados em um modo de operação da CPU chamado de <em>unprivileged</em>, onde nem todas instruções e registradores estão disponíveis. </p>
+<p>O ARM suporta um total de 7 modos de execução, sendo que apenas o usermode é não privilegiado:</p>
+<ol>
+<li>User mode – All user level applications run in this mode.</li>
+<li>FIQ Fast Interrupt Mode – Used to handle interrupts classified as “fast”, get in and get out type of interrupts.</li>
+<li>IRQ Mode – Used to handle device interrupts and non FIQ interrupts.</li>
+<li>Supervisor mode (default CPU boot mode). Used by the OS and software interrupts (SWIs).</li>
+<li>Abort – Used to handle violations caused by erroneous memory accesses</li>
+<li>Undefined – Used to handle undefined instructions</li>
+<li>System – A privileged mode with the same register set as usermode, used to run exceptions handlers.</li>
+</ol>
+<blockquote>
+<p>Material retirado de: <a href="https://www.ctrlinux.com/blog/?p=40">https://www.ctrlinux.com/blog/?p=40</a></p>
+</blockquote>
+<h3 id="userspace">userspace<a class="headerlink" href="#userspace" title="Permanent link">¶</a></h3>
+<p>Para entender melhor o userspace, vamos imaginar o que acontece quando um programa tenta acessar uma região de memória que pertence a ao kernel (modo privilegiado).</p>
+<p>Quando criamos um ponteiro e acessamos uma memória, esse comando é traduzindo para uma instrução do tipo LOAD em assembly. A instrução LOAD entra no pipeline da CPU e no estágio de execução a CPU passa o endereço da instrução para o hardware responsável por gerenciar a memória: Memory Management Unit (MMU). O MMU traduz o endereço de memória virtual para o endereço físico (pagina de memória), nesse ponto o MMU verifica o modo de execução atual da CPU e se a região de memória pode ser acessada pelo modo atual. No nosso caso a CPU irá mudar o modo do processador para <em>Abort</em> e tratar o acesso ao endereço de memória não autorizado, causando o encerramento do programa com <code>seg fault</code>. </p>
+<p>Programas no userspace se comunicam com o kernel via chamadas de sistema<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> (<em>system calls</em>), essas chamadas viram interrupções de software que serão processadas pelo kernel.</p>
+<h3 id="kernel-space">Kernel Space<a class="headerlink" href="#kernel-space" title="Permanent link">¶</a></h3>
+<p>As vantagens de trabalhar com o kernel space são: Poder manipular diretamente os periféricos do hardware, poder tratar interrupções de hw. Com grandes poderes vêm grandes responsabilidades, erros nesse  modo podem causar kernel panic e travar todo o sistema.</p>
+<h2 id="kernel-module-device-driver">Kernel Module / Device driver<a class="headerlink" href="#kernel-module-device-driver" title="Permanent link">¶</a></h2>
+<p><a href="https://lwn.net/Kernel/LDD3/">https://lwn.net/Kernel/LDD3/</a></p>
+<p>Um módulo do kernel é um código compilado que pode ser lincado com o kernel em tempo de execução (como alterar a asa de um avião em movimento), um módulo pode ser um driver de dispositivo, mas não necessariamente.</p>
+<h3 id="device-driver_1">Device driver<a class="headerlink" href="#device-driver_1" title="Permanent link">¶</a></h3>
+<div class="admonition info">
+<p class="admonition-title">Referências:</p>
+<ul>
+<li><a href="https://linux-kernel-labs.github.io/refs/heads/master/">https://linux-kernel-labs.github.io/refs/heads/master/</a></li>
+<li><a href="https://tldp.org/LDP/tlk/dd/drivers.html">https://tldp.org/LDP/tlk/dd/drivers.html</a></li>
+<li><a href="https://www.kernel.org/doc/html/v4.11/driver-api/index.html">https://www.kernel.org/doc/html/v4.11/driver-api/index.html</a></li>
+<li><code>linux/Documentation/driver-model/*</code></li>
+</ul>
+</div>
+<p>Drivers de dispositivos são responsáveis por implementar a parte de baixo nível de configuração, comunicação e gerenciamento do hardware (periféricos, memória, CPU). No repositório do kernel do Linux, os drivers estão localizados em: <code>linux/drivers/</code> e estão organizados por categoria:</p>
+<div class="highlight"><pre><span></span><code>accessibility  dca         ide         mfd              pnp         spmi
+acpi           devfreq     idle        misc             power       ssb
+amba           dio         iio         mmc              powercap    staging
+android        dma         infiniband  modules.builtin  pps         target
+ata            dma-buf     input       mtd              ps3         tc
+atm            edac        iommu       net              ptp         thermal
+auxdisplay     eisa        ipack       nfc              pwm         thunderbolt
+base           extcon      irqchip     ntb              rapidio     tty
+bcma           firewire    isdn        nubus            ras         uio
+block          firmware    Kconfig     nvdimm           regulator   usb
+bluetooth      fmc         leds        nvme             remoteproc  uwb
+built-in.a     fpga        lguest      nvmem            reset       vfio
+built-in.o     gpio        lightnvm    of               rpmsg       vhost
+bus            gpu         macintosh   oprofile         rtc         video
+cdrom          hid         mailbox     parisc           s390        virt
+char           hsi         Makefile    parport          sbus        virtio
+clk            hv          mcb         pci              scsi        vlynq
+clocksource    hwmon       md          pcmcia           sfi         vme
+connector      hwspinlock  media       perf             sh          w1
+cpufreq        hwtracing   memory      phy              sn          watchdog
+cpuidle        i2c         memstick    pinctrl          soc         xen
+crypto         i3c         message     platform         spi         zorro
+</code></pre></div>
+<p>No linux os drivers podem ser desenvolvidos/classificados em basicamente <a href="https://tldp.org/LDP/tlk/dd/drivers.html">três tipos</a>: <code>char module</code>, <code>block module</code>, <code>network module</code>.</p>
+<ul>
+<li>
+<p><strong>character device</strong>: É usado no caso que o driver pode ser acessado com um <em>strem</em> de bytes (como um arquivo). Deve implementar no mínimo as seguintes chamadas de sistema: <code>open/close/read/write</code>. O <code>/dev/console</code> e <code>/dev/tty</code> são exemplos desse tipo de device. Uma diferença entre um arquivo e um <code>char dev</code> é que no arquivo você pode mover o ponteiro para frente e para traz, mas nesse tipo de device não, você só pode ir para frente.</p>
+</li>
+<li>
+<p><strong>block device</strong>: Usado para implementar acesso a disco físico, esse tipo de driver opera com blocos de bytes (normalmente 512 bytes).</p>
+</li>
+<li>
+<p><strong>network device</strong>: Utilizado para implementar uma interface de rede (como o <code>loopback/ wlan0/ ...</code>). Essa interface é capaz de receber e enviar pacotes de dados, controlado pelo sistema de rede do kernel.</p>
+</li>
+</ul>
+<h2 id="device-tree-dts">Device Tree (dts)<a class="headerlink" href="#device-tree-dts" title="Permanent link">¶</a></h2>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Isso acontece apenas em sistemas embarcados. Para saber como o Kernel do linux sabe quais são os dispositivos disponíveis acesse:  <a href="https://unix.stackexchange.com/questions/399619/why-do-embedded-systems-need-device-tree-while-pcs-dont">https://unix.stackexchange.com/questions/399619/why-do-embedded-systems-need-device-tree-while-pcs-dont</a></p>
+</div>
+<p>Como o kernel do linux sabe quais são os dispositivos e drivers associados a eles? Um arquivo de configuração chamado de device tree é passado pelo boot para o kernel do Linux indicando os periféricos, e quais são os drivers associados a eles.</p>
+<h3 id="u-boot">u-boot<a class="headerlink" href="#u-boot" title="Permanent link">¶</a></h3>
+<p>A programação da FPGA é realizada pelo u-boot, antes da inicialização do
+Kernel do Linux.  No nosso caso, o u-boot foi pré configurado para ler o arquivo
+<code>soc_system.rbf</code> que está na partição do SDCARD junto com o kernel (<code>zImage</code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Explicação do processo de boot - até 1:50 minutos</p>
+<p><iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/vS7pvefsbRM" width="560"></iframe></p>
+</div>
+<p>O u-boot antes de inicializar o kernel do Linux, busca esse arquivo na partição do SDCARD, o extraí e programa <a href="https://github.com/u-boot/u-boot/blob/94905e1db8d8d42c4f39f14dbee2f9788390db5e/drivers/fpga/socfpga.c">"magicamente"</a> a FPGA. Nessa mesma partição temos mais dois arquivos: <code>u-boot.scr</code> e <code>socfpga.dtb</code>. O primeiro é um script de inicialização do boot na qual o u-boot lê para saber quais passos ele deve executar (se precisa carregar a fpga, onde está o kernel, ..., são os passos de inicialização), já o <code>socfpga.dtb</code> é o <strong>device tree do Linux</strong>, o dtb é um binário, que foi criado a partir de outro arquivo, o <code>.dts</code>, e ele contém informações sobre o hardware que é passado para o kernel no momento de inicialização.</p>
+<div class="admonition note">
+<p class="admonition-title">Device Tree for Dummies! - Thomas Petazzoni, Free Electrons</p>
+<p><iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/m_NyYEBxfn8" width="560"></iframe></p>
+</div>
+<h3 id="dtb-dts-compilado"><code>dtb</code> (dts compilado)<a class="headerlink" href="#dtb-dts-compilado" title="Permanent link">¶</a></h3>
+<p>O <code>dtb</code> é utilizado como ferramenta para indicar ao kernel quais são as
+configurações de hardware disponíveis, você não precisa recompilar o kernel caso
+o endereço de memória de algum periférico muder, basta informar no <code>dts</code>. Essa
+ferramenta é muito importante para sistemas embarcados, na qual, cada hardware
+possui sua especificidade.</p>
+<p>O <code>dtb</code> é gerado a partir de arquivo texto no formato <code>dts</code> que é então gerado
+pelas informações  de hardware extraída do <strong>Platform Designer</strong> que são salvas
+no arquivo: <code>.sopcinfo</code>, o mesmo arquivo que é utilizado pelo Eclipse-NIOS para
+gerar o BSP nos tutoriais passados. O BSP no Linux é chamado de <code>dts</code>  e
+possui um formato padrão que deve ser seguido!</p>
+<h3 id="entendendo-o-dts">entendendo o dts<a class="headerlink" href="#entendendo-o-dts" title="Permanent link">¶</a></h3>
+<p><img alt="" src="../figs/Tutorial-HLS-FPGA-BlinkLED-devicetree.png"/></p>
+<ul>
+<li>ref: <a href="https://developer.toradex.com/device-tree-customization">https://developer.toradex.com/device-tree-customization</a></li>
+</ul>
+<p>O começo do nosso <code>.dts</code> tem a definição das CPUs que estão
+disponíveis no CHIP:</p>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="nf">cpus</span><span class="cm"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="kr">#address-cells</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="kr">#size-cells</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">enable-method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"altr,socfpga-smp"</span><span class="p">;</span><span class="w"> </span><span class="cm">/* appended from boardinfo */</span><span class="w"></span>
+
+<span class="w">        </span><span class="nl">hps_0_arm_a9_0</span><span class="p">:</span><span class="w"> </span><span class="nf">cpu</span><span class="o">@</span><span class="mi">0x0</span><span class="cm"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kr">device_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"cpu"</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="kr">compatible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"arm,cortex-a9-16.1"</span><span class="p">,</span><span class="w"> </span><span class="s">"arm,cortex-a9"</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="kr">reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="mh">0x00000000</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">next-level-cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;&amp;</span><span class="na">hps_0_L2</span><span class="o">&gt;</span><span class="p">;</span><span class="w"> </span><span class="cm">/* appended from boardinfo */</span><span class="w"></span>
+<span class="w">        </span><span class="p">};</span><span class="w"> </span><span class="c1">//end cpu@0x0 (hps_0_arm_a9_0)</span>
+
+<span class="w">        </span><span class="nl">hps_0_arm_a9_1</span><span class="p">:</span><span class="w"> </span><span class="nf">cpu</span><span class="o">@</span><span class="mi">0x1</span><span class="cm"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kr">device_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"cpu"</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="kr">compatible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"arm,cortex-a9-16.1"</span><span class="p">,</span><span class="w"> </span><span class="s">"arm,cortex-a9"</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="kr">reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="mh">0x00000001</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">next-level-cache</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;&amp;</span><span class="na">hps_0_L2</span><span class="o">&gt;</span><span class="p">;</span><span class="w"> </span><span class="cm">/* appended from boardinfo */</span><span class="w"></span>
+<span class="w">        </span><span class="p">};</span><span class="w"> </span><span class="c1">//end cpu@0x1 (hps_0_arm_a9_1)</span>
+<span class="w">    </span><span class="p">};</span><span class="w"> </span><span class="c1">//end cpus</span>
+</code></pre></div>
+<p>Vamos ver em mais detalhes o <code>hps_0_uart0</code> do nosso <code>dts</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="w">        </span><span class="nl">hps_0_uart0</span><span class="p">:</span><span class="w"> </span><span class="nf">serial</span><span class="o">@</span><span class="mi">0xffc02000</span><span class="cm"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">            </span><span class="kr">compatible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"snps,dw-apb-uart-16.1"</span><span class="p">,</span><span class="w"> </span><span class="s">"snps,dw-apb-uart"</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="kr">reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="mh">0xffc02000</span><span class="w"> </span><span class="mh">0x00000100</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">interrupt-parent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;&amp;</span><span class="na">hps_0_arm_gic_0</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">interrupts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="mi">0</span><span class="w"> </span><span class="mi">162</span><span class="w"> </span><span class="mi">4</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">clocks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;&amp;</span><span class="na">l4_sp_clk</span><span class="o">&gt;</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="kr">reg</span><span class="o">-</span><span class="n">io-width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="mi">4</span><span class="o">&gt;</span><span class="p">;</span><span class="w"> </span><span class="cm">/* embeddedsw.dts.params.reg-io-width type NUMBER */</span><span class="w"></span>
+<span class="w">            </span><span class="kr">reg</span><span class="o">-</span><span class="n">shift</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">;</span><span class="w">    </span><span class="cm">/* embeddedsw.dts.params.reg-shift type NUMBER */</span><span class="w"></span>
+<span class="w">            </span><span class="kr">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"okay"</span><span class="p">;</span><span class="w">    </span><span class="cm">/* embeddedsw.dts.params.status type STRING */</span><span class="w"></span>
+<span class="w">        </span><span class="p">};</span><span class="w"> </span><span class="c1">//end serial@0xffc02000 (hps_0_uart0)</span>
+<span class="p">};</span><span class="w"> </span><span class="c1">//end serial@0x100020000 (jtag_uart)</span>
+</code></pre></div>
+<p>Ele indica que no nosso hardware, temos um componente serial no endereço
+<code>0xffc02000</code> que é compatível com os drivers: <code>snps,dw-apb-uart-16.1</code> e.ou
+<code>snps,dw-apb-uart</code>, que é implementado no Driver: 8250 no kernel do Linux:
+<a href="https://github.com/torvalds/linux/blob/master/drivers/tty/serial/8250/8250_dw.c">https://github.com/torvalds/linux/blob/master/drivers/tty/serial/8250/8250_dw.c</a>.
+E esse driver está configurado como ativo no nosso kernel:</p>
+<p><img alt="" src="../figs/Tutorial-HLS-FPGA-BlinkLED-uart.png" width="400"/></p>
+<p>E é por conta disso que conseguimos acessar o kit com USB (screen).</p>
+<details class="note">
+<summary>Parâmetro CONFIG_SERIAL_8250_CONSOLE</summary>
+<div class="highlight"><pre><span></span><code> CONFIG_SERIAL_8250_CONSOLE:                                                 │  
+  │                                                                             │  
+  │ If you say Y here, it will be possible to use a serial port as the          │  
+  │ system console (the system console is the device which receives all         │  
+  │ kernel messages and warnings and which allows logins in single user         │  
+  │ mode). This could be useful if some terminal or printer is connected        │  
+  │ to that serial port.                                                        │  
+  │                                                                             │  
+  │ Even if you say Y here, the currently visible virtual console               │  
+  │ (/dev/tty0) will still be used as the system console by default, but        │  
+  │ you can alter that using a kernel command line option such as               │  
+  │ "console=ttyS1". (Try "man bootparam" or see the documentation of           │  
+  │ your boot loader (grub or lilo or loadlin) about how to pass options        │  
+  │ to the kernel at boot time.)                                                │  
+  │                                                                             │  
+  │ If you don't have a VGA card installed and you say Y here, the              │  
+  │ kernel will automatically use the first serial line, /dev/ttyS0, as         │  
+  │ system console.                                                             │  
+  │                                                                             │  
+  │ You can set that using a kernel command line option such as                 │  
+  │ "console=uart8250,io,0x3f8,9600n8"                                          │  
+  │ "console=uart8250,mmio,0xff5e0000,115200n8".                                │  
+  │ and it will switch to normal serial console when the corresponding          │  
+  │ port is ready.                                                              │  
+  │ "earlycon=uart8250,io,0x3f8,9600n8"                                         │  
+  │ "earlycon=uart8250,mmio,0xff5e0000,115200n8".                               │  
+  │ it will not only setup early console.                                       │  
+  │                                                                             │  
+  │ If unsure, say N.                                                           │  
+  │                                                                             │  
+  │ Symbol: SERIAL_8250_CONSOLE [=y]                                            │  
+  │ Type  : boolean                                                             │  
+  │ Prompt: Console on 8250/16550 and compatible serial port              
+  │   Location:                                                                 │  
+  │     -&gt; Device Drivers                                                       │  
+  │       -&gt; Character devices                                                  │  
+  │         -&gt; Serial drivers                                                   │  
+  │           -&gt; 8250/16550 and compatible serial support (SERIAL_8250 [=y])    │  
+  │   Defined at drivers/tty/serial/8250/Kconfig:60                             │  
+  │   Depends on: TTY [=y] &amp;&amp; HAS_IOMEM [=y] &amp;&amp; SERIAL_8250 [=y]=y              │  
+  │   Selects: SERIAL_CORE_CONSOLE [=y] &amp;&amp; SERIAL_EARLYCON [=y]                 │  
+  │                                                                        
+</code></pre></div>
+</details>
+<div class="admonition note">
+<p class="admonition-title">Para mais informações sobre o <code>dts</code>:</p>
+<ul>
+<li><a href="https://elinux.org/Device_Tree_Usage">https://elinux.org/Device_Tree_Usage</a></li>
+<li><a href="https://elinux.org/Device_Tree_Reference">https://elinux.org/Device_Tree_Reference</a></li>
+<li><a href="https://developer.toradex.com/device-tree-customization#Device_Tree_Anatomy">https://developer.toradex.com/device-tree-customization#Device_Tree_Anatomy</a></li>
+<li><a href="https://bootlin.com/pub/conferences/2014/elc/petazzoni-device-tree-dummies/petazzoni-device-tree-dummies.pdf">https://bootlin.com/pub/conferences/2014/elc/petazzoni-device-tree-dummies/petazzoni-device-tree-dummies.pdf</a></li>
+</ul>
+</div>
+<div class="footnote">
+<hr/>
+<ol>
+<li id="fn:1">
+<p><a href="http://www.linux.it/~rubini/docs/ksys/">http://www.linux.it/~rubini/docs/ksys/</a> <a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">↩</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+              
+            </article>
+            
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../Entrega-5/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 👁 Entrega 2" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              👁 Entrega 2
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../Tutorial-HPS-kernel-module/" class="md-footer__link md-footer__link--next" aria-label="Next: Kernel module" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Kernel module
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2019 / Prof. Rafael Corsi / rafael.corsi@insper.edu.br
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "toc.integrate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.9c69f0bc.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.0.0/js-yaml.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/gh/insper-education/active-handout-plugins-js@main/package/plugin-bundle.js"></script>
+      
+    
+  </body>
+</html>

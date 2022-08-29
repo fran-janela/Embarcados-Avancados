@@ -1,0 +1,1665 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://insper.github.io/Embarcados-Avancados/2020/metropolis/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.2">
+    
+    
+      
+        <title>SDAccel / Vitis - Algoritmo metropolis - Eletiva: SoC e Linux Embarcado</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.69437709.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans+Extra+Condensed:700|Oxygen+Mono|Source+Sans+Pro:700|Source+Serif+Pro&amp;display=swap">
+<link rel="stylesheet" href="../../assets/css/devlife.css">
+
+
+    <script>
+        window.ihandout_config = JSON.parse(`{"report": {"url": "https://devlife.insper-comp.com.br/api/offerings/1/exercises/"}}`);
+    </script>
+
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sdaccel-vitis-algoritmo-metropolis" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Eletiva: SoC e Linux Embarcado" class="md-header__button md-logo" aria-label="Eletiva: SoC e Linux Embarcado" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Eletiva: SoC e Linux Embarcado
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SDAccel / Vitis - Algoritmo metropolis
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_1">
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/insper/Embarcados-Avancados" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Insper/Embarcados-Avancados
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../Tutorial-HPS/" class="md-tabs__link">
+        HPS
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../Tutorial-HPS-FPGA-BlinkLED/" class="md-tabs__link">
+        HPS + FPGA
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../Tutorial-Acelerando-HLS/" class="md-tabs__link">
+        Acelerando
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../Tutorial-FPGA-RTL/" class="md-tabs__link">
+        FPGA
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../Projeto-Overview/" class="md-tabs__link md-tabs__link--active">
+        Tutoriais Alunos
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../info-FPGA-e-Softwares/" class="md-tabs__link">
+        Úteis
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Eletiva: SoC e Linux Embarcado" class="md-nav__button md-logo" aria-label="Eletiva: SoC e Linux Embarcado" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Eletiva: SoC e Linux Embarcado
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/insper/Embarcados-Avancados" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Insper/Embarcados-Avancados
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          HPS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="HPS" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          HPS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-HPS/" class="md-nav__link">
+        Visão geral
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-HPS-Running/" class="md-nav__link">
+        Linux embarcado
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-HPS-BuildSystem/" class="md-nav__link">
+        Configurando infra
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-HPS-BlinkLED/" class="md-nav__link">
+        ARM BlinkLED
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../info-HPS-ethernet/" class="md-nav__link">
+        Extra: configurando rede
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Entrega-4/" class="md-nav__link">
+        👁 Entrega 1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-HPS-Kernel/" class="md-nav__link">
+        Compilando o kernel
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-HPS-Buildroot/" class="md-nav__link">
+        Buildroot
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Entrega-5/" class="md-nav__link">
+        👁 Entrega 2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-HPS-DeviceDriver1/" class="md-nav__link">
+        Device Driver
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-HPS-kernel-module/" class="md-nav__link">
+        Kernel module
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-HPS-kernel-chardriver/" class="md-nav__link">
+        Char device driver
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          HPS + FPGA
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="HPS + FPGA" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          HPS + FPGA
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-HPS-FPGA-BlinkLED/" class="md-nav__link">
+        Blink FPGA LED
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-HPS-FPGA-kernel-char-led-driver/" class="md-nav__link">
+        Char LED device driver
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-HPS-FPGA-VGA/" class="md-nav__link">
+        VGA
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Entrega-6/" class="md-nav__link">
+        👁 Entrega 6
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4">
+          Acelerando
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Acelerando" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Acelerando
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-Acelerando-HLS/" class="md-nav__link">
+        Acelerando - HLS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Entrega-Extra-1/" class="md-nav__link">
+        👁 Entrega 7
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          FPGA
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="FPGA" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          FPGA
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-FPGA-RTL/" class="md-nav__link">
+        RTL / VHDL
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Entrega-1/" class="md-nav__link">
+        👁 Entrega 1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-FPGA-NIOS/" class="md-nav__link">
+        NIOS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Entrega-2/" class="md-nav__link">
+        👁 Entrega 2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Entrega-3/" class="md-nav__link">
+        👁 Entrega 3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tutorial-FPGA-NIOS-IP/" class="md-nav__link">
+        IP Core
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Tutoriais Alunos
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tutoriais Alunos" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Tutoriais Alunos
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Projeto-Overview/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Projeto-Rubrica/" class="md-nav__link">
+        Rubrica
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/Insper/Embarcados-Avancados-Template" class="md-nav__link">
+        Template markdown
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PS3-Linux-Tutorial/" class="md-nav__link">
+        PS3 Hack
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Android/" class="md-nav__link">
+        Android para Raspbery Pi 3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../LED-HW/" class="md-nav__link">
+        Periférico para controlar matriz de led da família WS281x
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../LED-Linux/" class="md-nav__link">
+        Driver linux para acender leds
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../python/" class="md-nav__link">
+        Soc & Python
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          SDAccel / Vitis - Algoritmo metropolis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        SDAccel / Vitis - Algoritmo metropolis
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#comecando" class="md-nav__link">
+    Começando
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#motivacao" class="md-nav__link">
+    Motivação
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#introducao" class="md-nav__link">
+    Introdução
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#aplicacoes" class="md-nav__link">
+    Aplicações
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metropolis-hastings" class="md-nav__link">
+    Metropolis Hastings
+  </a>
+  
+    <nav class="md-nav" aria-label="Metropolis Hastings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#o-algoritmo" class="md-nav__link">
+    O algoritmo
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explicacao" class="md-nav__link">
+    Explicação
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#criacao-das-instancias" class="md-nav__link">
+    Criação das instâncias
+  </a>
+  
+    <nav class="md-nav" aria-label="Criação das instâncias">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#na-instancia-de-desenvolvimento" class="md-nav__link">
+    Na instância de desenvolvimento
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#na-instancia-de-fpga" class="md-nav__link">
+    Na instância de FPGA
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementacao-dos-kernels" class="md-nav__link">
+    Implementação dos Kernels
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vitis" class="md-nav__link">
+    Vitis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sdaccel" class="md-nav__link">
+    SDAccel
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#referencias" class="md-nav__link">
+    Referencias
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Audio/" class="md-nav__link">
+        Áudio na DE10
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cripto/" class="md-nav__link">
+        Criptografia em Hardware Fpga
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2019/Gabriel-TensorFlow/" class="md-nav__link">
+        TensorFlow
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2019/Leo-OpenCL/" class="md-nav__link">
+        OpenCL
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2019/Elisa-Yocto/" class="md-nav__link">
+        Yocto
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2019/Pedro-OpenCV/" class="md-nav__link">
+        Jetson Nano GPU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2019/Martim-F1/" class="md-nav__link">
+        FPGA na AWS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../2019/Toranja-DevDriver/" class="md-nav__link">
+        Linux Device Driver
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Úteis
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Úteis" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Úteis
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../info-FPGA-e-Softwares/" class="md-nav__link">
+        Infraestrutura de HW e SWs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../info-VHDL/" class="md-nav__link">
+        VHDL
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../info-SDcard/" class="md-nav__link">
+        Atualizando o SDCARD
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../info-HPS-Serial/" class="md-nav__link">
+        Screen
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../info-HPS-ethernet/" class="md-nav__link">
+        Ethernet
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/Insper/Embarcados-Avancados/edit/master/docs-src/2020/metropolis/index.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+<h1 id="sdaccel-vitis-algoritmo-metropolis">SDAccel / Vitis - Algoritmo metropolis<a class="headerlink" href="#sdaccel-vitis-algoritmo-metropolis" title="Permanent link">¶</a></h1>
+<ul>
+<li><strong>Alunos:</strong> Vinicius Gomes de Lima / Lucca Delchiaro Costabile</li>
+<li><strong>Curso:</strong> Engenharia da Computação</li>
+<li><strong>Semestre:</strong> 8</li>
+<li><strong>Contato:</strong></li>
+<li><strong>Ano:</strong> 2020</li>
+</ul>
+<h2 id="comecando">Começando<a class="headerlink" href="#comecando" title="Permanent link">¶</a></h2>
+<p>Para seguir esse tutorial é necessário:</p>
+<ul>
+<li><strong>AWS:</strong> <a href="https://aws.amazon.com/free">Login da AWS</a></li>
+</ul>
+<h2 id="motivacao">Motivação<a class="headerlink" href="#motivacao" title="Permanent link">¶</a></h2>
+<p>Existem problemas em diversas áreas da computação hoje em dia que podem ser processados das mais diversas formas, a fim de que sua execuções fiquem o melhor e o mais dinamicas o possível.</p>
+<p>Tecnologias como paralelização em CPU, uso de GPUs e TPUs são alguns dos mais famosos, no entanto, com o crescimento das áreas de cloud e hardwares dedicados, a junção destas tecnologias pode se provar extremamente eficiente na solução de alguns problemas</p>
+<p>Este tutorial se propõe justamente a uma trazer um primeiro contato com um problema real - no caso da area de machine learning - que pode ser tratado com eficiência utilizando-se das tecnologias acima citadas.</p>
+<h2 id="introducao">Introdução<a class="headerlink" href="#introducao" title="Permanent link">¶</a></h2>
+<p>Para a implementação da solução existem essencialmente dois ambientes de desenvolvimento SDAccel e o Vitis. Aqui vamos comparar a implementação do algoritmo de <a href="https://github.com/ggrizzly/MetropolisHastingsAlgorithm">metropolis</a> em cada um  dos ambientes.</p>
+<p>Ambos ambientes sao da Xilinx, sendo o SDAccel o mais antigo e o Vitis recentemente lançado (2 de Dezembro de 2019). Nao vamos entrar em muitos detalhes sobre o SDAccel pois ja existe um <a href="https://insper.github.io/Embarcados-Avancados/2019/Martim-F1/">tutorial de hello-world feito por Martim F. José</a>, nele eh detalhado um pouco da AWS, detalhes técnicos do SDAccel e como executar um hello world. Um detalhe relevante sobre o SDAccel eh que o kernel so pode ser feito em OpenCL, que para muitos desenvolvedores ja trás uma camada de abstração que facilita no desenvolvimento.</p>
+<p>O vitis por sua vez, permite o desenvolvimento em python, C, C++, OpenCL e RTL, assim facilitando ainda mais o desenvolvimento e abrindo o caminho para mais desenvolvedores utilizarem essa ferramenta. Para aqueles que nao querem escrever a própria biblioteca, o vitis trás diversas bibliotecas prontas para uso em varias áreas, AI, visão, segurança, finanças quantitativas, banco de dados, etc.</p>
+<p>Utilizando esses dois ambientes, vamos implementar o algoritmo de metropolis hastings em openCL no ambiente do SDAaccel e C++ no Vitis.</p>
+<h2 id="aplicacoes">Aplicações<a class="headerlink" href="#aplicacoes" title="Permanent link">¶</a></h2>
+<p>O algoritmo de metropolis hastings é muito importante em machine-learning no tema de escolha de números aleatórios. No entanto ele requer uma grande quantidade de iterações tornando-o muito custoso em CPUs normais. E por isso a aplicação em fpga passa a ser importante no caso: as operações feitas pelo algoritmo são baratas para se fazer na fpga fazendo com que boas implementações devolvam amostras de números aleatórios em um tempo muito mais otimizado que em CPUs.</p>
+<p>Esta aplicação é um bom exemplo de todo o conceito por trás de operações em fpga em cloud: encontrar algoritmos que possuem uma parte que fazem uma mesma operação diversas vezes e adaptar-los para que tais operações sejam feitas na fpga pois esta é ótima para realizar esta tarefa.</p>
+<h2 id="metropolis-hastings">Metropolis Hastings<a class="headerlink" href="#metropolis-hastings" title="Permanent link">¶</a></h2>
+<p>O algoritmo implementado neste tutorial é o metropolis hastings, um método que de se obter amostras aleatórias de uma distribuição probabilística em que tal ato poderia ser difícil.</p>
+<h3 id="o-algoritmo">O algoritmo<a class="headerlink" href="#o-algoritmo" title="Permanent link">¶</a></h3>
+<p>Considere f(x) como uma função proporcional a distribuição probabilística p(x) que se deseja chegar.</p>
+<p>O método consiste em:</p>
+<ol>
+<li>Escolher um valor inicial arbitrário para x0 e uma distribuição arbitraria g(x|y) que sugere um candidato para o próximo valor da amostra x, dado o valor da amostra anterior y.</li>
+<li>Para todo valor i de 1 até um grande número m vamos repetir os seguintes passos:<ol>
+<li>Encolher um candidato x' ~ g(x' | x(i))</li>
+<li>Calcular a taxa de aceitação a = f(x')/f(x(i)) . Como f é proporcional à densidade de P, temos que a = f(x')/f(x(i)) = p(x')/p(x(i))</li>
+<li>Com o valor de a em mãos<ol>
+<li>Gere um número aleatório uniforme u ∈ [0,1]</li>
+<li>Se u &lt;= a aceite o candidato definindo x(i+1) = x'</li>
+<li>Se u &gt; a rejeite o candidato e faça  x(i+1) &lt;- x(i)</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="explicacao">Explicação<a class="headerlink" href="#explicacao" title="Permanent link">¶</a></h3>
+<p>No algoritmo, o que acontece é que ao pegarmos elementos da da distribuição g, o passo 2c atua como um corretor já que g não é a distribuição alvo. Ou seja, a cada iteração se checa se o movimento é vantajoso para que a distribuição se aproxime mais de p e so se aceita o valor em caso positivo.</p>
+<details class="info">
+<summary>Info</summary>
+<p>Se tiver mais curiosidades sobre o algoritmo vale a pena dar uma olhada nesse vídeo.</p>
+<p><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="720" src="https://www.youtube.com/embed/0lpT-yveuIA" width="1280"></iframe></p>
+</details>
+<h3 id="criacao-das-instancias">Criação das instâncias<a class="headerlink" href="#criacao-das-instancias" title="Permanent link">¶</a></h3>
+<p>Primeiramente é necessário criar na própria interface da AWS duas instâncias f1.2xlarge  (instâncias com FPGA) e duas m5.large (instâncias de desenvolvimento). Para cada tipo de instância faça uma com a AMI <code>FPGA Developer AMI 1.9.1</code> (Vitis) e outra com a AMI <code>FPGA Developer AMI 1.7.1</code>(SDAccel).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Para as instâncias de desenvolvimento, quanto mais vCPUs, mais rápido será compilado o programa. </p>
+<details class="warning">
+<summary>Warning</summary>
+<ul>
+<li>Prestar atenção nas AMIs utilizadas. Nao é possível compilar um programa em vitis na versão 1.7.1, assim como SDAccel em 1.9.1. </li>
+<li>Utilizar no mínimo 100GB para as instâncias de desenvolvimento, pois o processo de compilação utiliza muita memoria.</li>
+</ul>
+</details>
+</div>
+<p>Também clone o repositorio <a href="https://github.com/Veronur/TuttorialEmbarcados/blob/master/docs-src/index.md">https://github.com/Veronur/TuttorialEmbarcados/blob/master/docs-src/index.md</a></p>
+<h4 id="na-instancia-de-desenvolvimento">Na instância de desenvolvimento<a class="headerlink" href="#na-instancia-de-desenvolvimento" title="Permanent link">¶</a></h4>
+<details class="note">
+<summary>Note</summary>
+<p>Foi utilizado a estrutura de pastas do próprio repositório, os arquivos foram editados diretamente no <code>src/</code> para reaproveitar o makefile ja configurado.</p>
+</details>
+<p>Os passos para preparar o ambiente e rodar a simulação sao parecidos.</p>
+<div class="codehilite"><pre><span></span><code>1. git clone https://github.com/aws/aws-fpga.git $AWS_FPGA_REPO_DIR
+2. cd $AWS_FPGA_REPO_DIR
+3. source sdaccel_setup.sh / vitis_setup.sh (depende do ambiente que esta trabalhando)
+4. cd
+    1. SDAccel/examples/xilinx_2019.1/getting_started/hello_world/helloworld_ocl/
+    2. Vitis/examples/xilinx/hello_world
+5. Substitua o conteúdo do src com o conteúdo do github clonado
+6. make clean
+7. Simulando em software e hardware
+    1. make check TARGETS=sw_emu DEVICE=$AWS_PLATFORM all
+    2. make check TARGETS=hw_emu DEVICE=$AWS_PLATFORM all
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Caso aconteça um erro de <em>DEVICE</em> nao encontrado, mude o parâmetro DEVICE= para DEVICES=</p>
+</div>
+<p>Com o programa testado, esta na hora de compilar de verdade.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A compilação pode demorar algumas horas.</p>
+<ol>
+<li>make clean</li>
+<li>make TARGETS=hw DEVICES=$AWS_PLATFORM all</li>
+<li>Va tomar um cafe</li>
+</ol>
+</div>
+<p>Com a compilação finalizada serão gerados dois arquivos, o executável metropolis e o binário para a FPGA .xclbin. Transfira ambos para a instância f1.</p>
+<h4 id="na-instancia-de-fpga">Na instância de FPGA<a class="headerlink" href="#na-instancia-de-fpga" title="Permanent link">¶</a></h4>
+<p>Com os arquivos transferidos, execute os passos 1 - 2 da parte anterior e em seguida execute:</p>
+<ol>
+<li>source sdaccel_runtime_setup.sh / vitis_runtime_setup.sh</li>
+<li>chmod +x metropolis</li>
+<li>./metropolis</li>
+</ol>
+<details class="note">
+<summary>Note</summary>
+<p>Pode ser necessario executar o ultimo passo como "./metropolis .xclbin"</p>
+</details>
+<h3 id="implementacao-dos-kernels">Implementação dos Kernels<a class="headerlink" href="#implementacao-dos-kernels" title="Permanent link">¶</a></h3>
+<p>Para ambas implementações existe um arquivo host em C++ que consiste em preparar o ambiente.</p>
+<ol>
+<li>Criar os vetores</li>
+<li>Criar o <em>Context</em> e o <em>Command Queue</em></li>
+<li>Encontrar os binários</li>
+<li>Alocar memoria para a FPGA</li>
+<li>Extrair o kernel do programa carregado</li>
+<li>Definir os argumentos do kernel</li>
+<li>Iniciar o kernel</li>
+<li>Transferir os resultados da FPGA para CPU</li>
+</ol>
+<p>A diferença está no kernel que, como foi dito, enquanto em SDAccel o código eh feito em OpenCL, no vitis foi feito totalmente em C++.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A sintaxe de OpenCL é muito parecida a de C++.</p>
+<p>Nos códigos a seguir estão apenas a parte principal do código, o resto são apenas definições de constantes.</p>
+</div>
+<h3 id="vitis">Vitis<a class="headerlink" href="#vitis" title="Permanent link">¶</a></h3>
+<div class="codehilite"><pre><span></span><code>extern "C" {
+    void vector_add(const double *random1, // Read-Only Vector 1
+        const double *random2, // Read-Only Vector 2
+        double *c,     // Output Result
+        int n_elements                 // Size in integer
+        ) {
+
+        double p, r;
+
+        for (int i = 0 ; i &lt; n_elements ; i += 1) {
+        #pragma HLS LOOP_TRIPCOUNT min = c_len max = c_len
+
+            double rn = r + random1[i]; //random value from -1 to 1
+            double pn = q(rn);
+            if (pn &gt;= p) {
+                    p = pn;
+                    r = rn;
+            } else {
+                    double u = random2[i]; //random value from 0 to 1
+                    if(u &lt; (double) (pn/p)) {
+                            p = pn;
+                            r = rn;
+                    }
+            }
+            c[i] = r;
+        }
+    }
+}
+</code></pre></div>
+<h3 id="sdaccel">SDAccel<a class="headerlink" href="#sdaccel" title="Permanent link">¶</a></h3>
+<div class="codehilite"><pre><span></span><code>kernel __attribute__((reqd_work_group_size(1, 1, 1)))
+void vector_add(global double* c,
+                global const double* random1,
+                global const double* random2,
+                const int n_elements)
+{
+
+    double p, r;
+
+    __attribute__((xcl_loop_tripcount(c_len, c_len)))
+    for (int i = 0 ; i &lt; n_elements ; i += 1) {
+
+        double rn = r + randoms1[i]; //random value from -1 to 1
+        double pn = q(rn);
+        if (pn &gt;= p) {
+                p = pn;
+                r = rn;
+        } else {
+                double u = randoms2[i]; //random value from 0 to 1
+                if(u &lt; (double) (pn/p)) {
+                        p = pn;
+                        r = rn;
+                }
+        }
+        c[i] = r;
+    }
+}
+</code></pre></div>
+<p>Nota-se que as sintaxes são realmente parecidas, a diferença está nas partes de otimização, no vitis é usado o <em>pragma</em>, recurso utilizado em outras bibliotecas como o CUDA, enquanto no SDAccel é utilizado o __attribute__.</p>
+<h2 id="referencias">Referencias<a class="headerlink" href="#referencias" title="Permanent link">¶</a></h2>
+<ul>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm">https://en.wikipedia.org/wiki/Metropolis%E2%80%93Hastings_algorithm</a></p>
+</li>
+<li>
+<p><a href="https://github.com/aws/aws-fpga">https://github.com/aws/aws-fpga</a></p>
+</li>
+<li>
+<p><a href="https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html#overview">https://www.xilinx.com/products/design-tools/vitis/vitis-platform.html#overview</a></p>
+</li>
+</ul>
+
+
+
+
+              
+            </article>
+            
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../python/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Soc &amp; Python" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Soc & Python
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../Audio/" class="md-footer__link md-footer__link--next" aria-label="Next: Áudio na DE10" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Áudio na DE10
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2019 / Prof. Rafael Corsi / rafael.corsi@insper.edu.br
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "toc.integrate", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.9c69f0bc.min.js"></script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.0.0/js-yaml.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/gh/insper-education/active-handout-plugins-js@main/package/plugin-bundle.js"></script>
+      
+    
+  </body>
+</html>
