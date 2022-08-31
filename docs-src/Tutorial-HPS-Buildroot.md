@@ -199,7 +199,7 @@ Os gráficos são salvos na pasta: `output/graphs/`
     Instale as dependências
     
     ``` bash
-    sudo apt install graphviz python-matplotlib python-numpy
+    sudo apt install graphviz python3-matplotlib python3-numpy
     ```
 
 !!! example ""
