@@ -244,6 +244,11 @@ Lá está comentando como extrair o `rootfs.tar` para o nosso cartão de memóri
     - initd process
     - para que serve e como funciona o /linuxrc
     - para que serve  o /proc
+    
+!!! tip "Dica Makefile:"
+    Para o Makefile funcionar com a introdução de senha para acesso root pelo buildroot, precisamos passar como argumento essa senha.
+    
+    Para isso, pode ser usado o sistema de [sshpass](https://stackoverflow.com/questions/50096/how-to-pass-password-to-scp) para autenticar seu serviço (especialmente útil para o **scp**).
 
 ## Referências
 
